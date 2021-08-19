@@ -1,12 +1,14 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
-class Authenticaton {
+class Authentication {
+  final String id;
   final String userName;
   final String email;
   final String mobileNumber;
   final String password;
 
-  Authenticaton({
+  Authentication({
+    required this.id,
     required this.userName,
     required this.email,
     required this.mobileNumber,
@@ -15,23 +17,50 @@ class Authenticaton {
 }
 
 class AuthenticationData with ChangeNotifier {
-  List<Authenticaton> authenticationDataList = [
-    Authenticaton(
+  final List<Authentication> _authenticationDataList = [
+    Authentication(
+      id: 'test@test.com12345678',
       userName: 'tester',
-      email: 'test@test.test',
+      email: 'test@test.com',
       mobileNumber: '9999999999',
       password: '12345678',
     )
   ];
 
-  void login(
-    String username,
-    String mail,
-    String number,
+  List<Authentication> get authenticationDataList {
+    return [..._authenticationDataList];
+  }
+
+  Authentication findById(String id) {
+    return authenticationDataList.firstWhere((element) => element.id == id);
+  }
+
+  bool login(
+    String id,
+    bool isValid,
+  ) {
+    final userAuthData = findById(id);
+    if (userAuthData.runtimeType == Authentication) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  bool signUp(
+    String userName,
+    String email,
+    String mobileNumber,
     String password,
   ) {
-    print(authenticationDataList
-        .where((element) => element.userName == username)
-        .runtimeType);
+    _authenticationDataList.add(Authentication(
+        id: email + password,
+        userName: userName,
+        email: email,
+        mobileNumber: mobileNumber,
+        password: password));
+    print(email + password);
+    print('signupmode');
+    return login(email + password, false);
   }
 }

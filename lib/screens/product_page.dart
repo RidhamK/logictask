@@ -1,10 +1,11 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
-import 'package:logictask/models/product.dart';
-import 'package:logictask/screens/cart_page.dart';
-import 'package:logictask/screens/product_detail_page.dart';
+import 'package:logictask/models/cart.dart';
 import 'package:provider/provider.dart';
+
+import '/models/product.dart';
+
+import '/screens/cart_page.dart';
+import '/screens/product_detail_page.dart';
 
 class ProductScreen extends StatefulWidget {
   const ProductScreen({Key? key}) : super(key: key);
@@ -17,7 +18,9 @@ class ProductScreen extends StatefulWidget {
 class _ProductScreenState extends State<ProductScreen> {
   @override
   Widget build(BuildContext context) {
+    final cart = Provider.of<Cart>(context);
     final productData = Provider.of<Products>(context);
+    final valid = ModalRoute.of(context)!.settings.arguments as bool;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Products'),
@@ -25,7 +28,7 @@ class _ProductScreenState extends State<ProductScreen> {
           IconButton(
             onPressed: () =>
                 Navigator.of(context).pushNamed(CartScreen.routeName),
-            icon: Icon(Icons.add),
+            icon: const Icon(Icons.shopping_cart),
           ),
         ],
       ),
@@ -49,8 +52,16 @@ class _ProductScreenState extends State<ProductScreen> {
                 textAlign: TextAlign.center,
               ),
               trailing: IconButton(
-                onPressed: null,
-                icon: Icon(Icons.shopping_cart),
+                onPressed: () {
+                  valid
+                      ? cart.addItem(
+                          productData.items[index].id,
+                          productData.items[index].price,
+                          productData.items[index].title,
+                        )
+                      : Navigator.of(context).pushReplacementNamed('/');
+                },
+                icon: const Icon(Icons.shopping_cart),
               ),
             ),
           ),
