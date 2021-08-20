@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/authentication.dart';
+import '/models/authentication.dart';
 
 import '/screens/product_page.dart';
 
@@ -65,111 +65,119 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.orange[100],
       body: Center(
         child: Card(
+          margin: const EdgeInsets.all(10),
+          color: Colors.white,
+          elevation: 5,
           child: SingleChildScrollView(
             child: Form(
               key: _formKey,
-              child: Column(
-                children: [
-                  if (_isLogin)
-                    TextFormField(
-                      key: ValueKey('uswrname'),
-                      controller: _userNameController,
-                      decoration: const InputDecoration(
-                        labelText: 'Username',
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    if (_isLogin)
+                      TextFormField(
+                        key: const ValueKey('username'),
+                        controller: _userNameController,
+                        decoration: const InputDecoration(
+                          labelText: 'Username',
+                        ),
+                        validator: (value) {
+                          if (value!.isEmpty || value.length < 4) {
+                            return 'Enter minimum 4 characters';
+                          }
+                          return null;
+                        },
+                        onSaved: (newValue) {
+                          _authSignUpData['userName'] = newValue!;
+                        },
                       ),
+                    TextFormField(
+                      key: const ValueKey('email'),
+                      controller: _emailController,
+                      decoration: const InputDecoration(labelText: 'Email'),
                       validator: (value) {
-                        if (value!.isEmpty || value.length < 4) {
-                          return 'Enter minimum 4 characters';
+                        if (value!.isEmpty || !value.contains('@')) {
+                          return 'Enter Valid Email Address';
                         }
                         return null;
                       },
                       onSaved: (newValue) {
-                        _authSignUpData['userName'] = newValue!;
+                        _authLoginData['email'] = newValue!;
+                        _authSignUpData['email'] = newValue;
                       },
                     ),
-                  TextFormField(
-                    key: ValueKey('email'),
-                    controller: _emailController,
-                    decoration: const InputDecoration(labelText: 'Email'),
-                    validator: (value) {
-                      if (value!.isEmpty || !value.contains('@')) {
-                        return 'Enter Valid Email Address';
-                      }
-                      return null;
-                    },
-                    onSaved: (newValue) {
-                      _authLoginData['email'] = newValue!;
-                      _authSignUpData['email'] = newValue;
-                    },
-                  ),
-                  if (_isLogin)
+                    if (_isLogin)
+                      TextFormField(
+                        key: const ValueKey('number'),
+                        controller: _mobileNUmberController,
+                        decoration:
+                            const InputDecoration(labelText: 'Mobile Number'),
+                        keyboardType: TextInputType.number,
+                        validator: (value) {
+                          if (value!.length != 10) {
+                            return 'Enter Valid Number';
+                          }
+                          return null;
+                        },
+                        onSaved: (newValue) {
+                          _authSignUpData['number'] = newValue!;
+                        },
+                      ),
                     TextFormField(
-                      key: ValueKey('number'),
-                      controller: _mobileNUmberController,
-                      decoration:
-                          const InputDecoration(labelText: 'Mobile Number'),
-                      keyboardType: TextInputType.number,
+                      key: const ValueKey('password'),
+                      controller: _passController,
+                      decoration: const InputDecoration(labelText: 'Password'),
                       validator: (value) {
-                        if (value!.length != 10) {
-                          return 'Enter Valid Number';
+                        if (value!.isEmpty || value.length < 8) {
+                          return 'Password should be of 8 numeric digit';
                         }
-                        return null;
                       },
                       onSaved: (newValue) {
-                        _authSignUpData['number'] = newValue!;
+                        _authLoginData['password'] = newValue!;
+                        _authSignUpData['password'] = newValue;
                       },
                     ),
-                  TextFormField(
-                    key: ValueKey('password'),
-                    controller: _passController,
-                    decoration: const InputDecoration(labelText: 'Password'),
-                    validator: (value) {
-                      if (value!.isEmpty || value.length < 8) {
-                        return 'Password should be of 8 numeric digit';
-                      }
-                    },
-                    onSaved: (newValue) {
-                      _authLoginData['password'] = newValue!;
-                      _authSignUpData['password'] = newValue;
-                    },
-                  ),
-                  if (_isLogin)
-                    TextFormField(
-                      key: ValueKey('conformpassword'),
-                      decoration:
-                          const InputDecoration(labelText: 'Confirm Password'),
-                      validator: (value) {
-                        if (_passController.text != value) {
-                          return 'Password does not match';
-                        }
-                        return null;
+                    if (_isLogin)
+                      TextFormField(
+                        key: const ValueKey('conformpassword'),
+                        decoration: const InputDecoration(
+                            labelText: 'Confirm Password'),
+                        validator: (value) {
+                          if (_passController.text != value) {
+                            return 'Password does not match';
+                          }
+                          return null;
+                        },
+                      ),
+                    ElevatedButton(
+                      onPressed: () {
+                        _submit();
                       },
+                      child: Text(_isLogin ? 'Signup' : 'Login'),
                     ),
-                  ElevatedButton(
-                    onPressed: () {
-                      _submit();
-                    },
-                    child: Text(_isLogin ? 'Signup' : 'Login'),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      setState(() {
-                        _isLogin = !_isLogin;
-                      });
-                    },
-                    child: Text(_isLogin ? 'Have Account ?' : 'Create Account'),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pushReplacementNamed(
-                          ProductScreen.routeName,
-                          arguments: false);
-                    },
-                    child: const Text('Skip'),
-                  ),
-                ],
+                    TextButton(
+                      onPressed: () {
+                        setState(() {
+                          _isLogin = !_isLogin;
+                        });
+                      },
+                      child:
+                          Text(_isLogin ? 'Have Account ?' : 'Create Account'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pushReplacementNamed(
+                            ProductScreen.routeName,
+                            arguments: false);
+                      },
+                      child: const Text('Skip'),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

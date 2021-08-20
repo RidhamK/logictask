@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:logictask/models/cart.dart';
 import 'package:provider/provider.dart';
+
+import '/models/cart.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({Key? key}) : super(key: key);
@@ -23,10 +24,11 @@ class _CartScreenState extends State<CartScreen> {
           Card(
             child: Row(
               children: [
-                Text('Total'),
-                Spacer(),
+                const Text('Total'),
+                const Spacer(),
                 Chip(
-                  label: Text('${cart.totalAmount.toStringAsFixed(2)}'),
+                  label:
+                      Text('\u{20B9} ${cart.totalAmount.toStringAsFixed(2)}'),
                 ),
               ],
             ),

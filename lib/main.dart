@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '/models/cart.dart';
 import '/models/product.dart';
 import '/models/authentication.dart';
@@ -35,7 +36,6 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        // home: const SignUpScreen(),
         initialRoute: '/',
         routes: {
           '/': (ctx) => const SignUpScreen(),

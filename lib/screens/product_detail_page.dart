@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:logictask/models/product.dart';
 import 'package:provider/provider.dart';
+
+import '/models/product.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   const ProductDetailScreen({Key? key}) : super(key: key);
@@ -13,22 +14,22 @@ class ProductDetailScreen extends StatefulWidget {
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   @override
   Widget build(BuildContext context) {
-    final productData = Provider.of<Products>(context);
+    final productId = ModalRoute.of(context)!.settings.arguments as String;
+    final productData = Provider.of<Products>(context).findById(productId);
     return Scaffold(
       appBar: AppBar(),
       body: Column(
         children: [
-          Container(
-            child: Image.network(productData.items[1].imageUrl),
-          ),
-          SizedBox(
+          Image.network(productData.imageUrl),
+          const SizedBox(
             height: 10,
           ),
-          Text('Price'),
-          SizedBox(
+          Text('\u{20B9} ${productData.price.toString()}'),
+          const SizedBox(
             height: 10,
           ),
-          Text('Description'),
+          Text(productData.title),
+          Text(productData.description),
         ],
       ),
     );

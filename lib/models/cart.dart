@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class CartItem {
   final String id;
@@ -15,14 +15,10 @@ class CartItem {
 }
 
 class Cart with ChangeNotifier {
-  Map<String, CartItem> _items = {};
+  final Map<String, CartItem> _items = {};
 
   Map<String, CartItem> get item {
     return {..._items};
-  }
-
-  int get ItemCount {
-    return _items.length;
   }
 
   double get totalAmount {
@@ -44,7 +40,7 @@ class Cart with ChangeNotifier {
         (value) => CartItem(
             id: value.id,
             price: value.price,
-            quantity: value.quantity,
+            quantity: value.quantity + 1,
             title: value.title),
       );
     } else {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:logictask/models/cart.dart';
 import 'package:provider/provider.dart';
 
+import '/models/cart.dart';
 import '/models/product.dart';
 
 import '/screens/cart_page.dart';
@@ -42,7 +42,8 @@ class _ProductScreenState extends State<ProductScreen> {
                 fit: BoxFit.cover,
               ),
               onTap: () {
-                Navigator.of(context).pushNamed(ProductDetailScreen.routeName);
+                Navigator.of(context).pushNamed(ProductDetailScreen.routeName,
+                    arguments: productData.items[index].id);
               },
             ),
             footer: GridTileBar(
@@ -53,13 +54,41 @@ class _ProductScreenState extends State<ProductScreen> {
               ),
               trailing: IconButton(
                 onPressed: () {
-                  valid
-                      ? cart.addItem(
-                          productData.items[index].id,
-                          productData.items[index].price,
-                          productData.items[index].title,
-                        )
-                      : Navigator.of(context).pushReplacementNamed('/');
+                  if (valid) {
+                    cart.addItem(
+                        productData.items[index].id,
+                        productData.items[index].price,
+                        productData.items[index].title);
+                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Added to cart, Check cart'),
+                        duration: Duration(seconds: 3),
+                      ),
+                    );
+                  } else {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text('Please Login First'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text('Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                  '/', (route) => false);
+                            },
+                            child: const Text('OK'),
+                          )
+                        ],
+                      ),
+                    );
+                  }
                 },
                 icon: const Icon(Icons.shopping_cart),
               ),

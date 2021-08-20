@@ -59,8 +59,7 @@ class AuthenticationData with ChangeNotifier {
         email: email,
         mobileNumber: mobileNumber,
         password: password));
-    print(email + password);
-    print('signupmode');
+
     return login(email + password, false);
   }
 }
