@@ -46,7 +46,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
       valid
           ? Navigator.of(context)
               .pushReplacementNamed(ProductScreen.routeName, arguments: valid)
-          : null;
+          : ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Cant not login check details'),
+              ),
+            );
     } else {
       final valid =
           Provider.of<AuthenticationData>(context, listen: false).signUp(
@@ -58,7 +62,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
       valid
           ? Navigator.of(context)
               .pushReplacementNamed(ProductScreen.routeName, arguments: valid)
-          : null;
+          : ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Can not  SignUp Check Detail'),
+              ),
+            );
     }
   }
 

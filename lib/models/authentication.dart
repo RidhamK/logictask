@@ -39,10 +39,14 @@ class AuthenticationData with ChangeNotifier {
     String id,
     bool isValid,
   ) {
-    final userAuthData = findById(id);
-    if (userAuthData.runtimeType == Authentication) {
-      return true;
-    } else {
+    try {
+      final userAuthData = findById(id);
+      if (userAuthData.runtimeType == Authentication) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
       return false;
     }
   }
